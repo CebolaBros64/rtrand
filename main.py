@@ -186,11 +186,13 @@ def parse2list(_bin, unpack, length):
 if __name__ == '__main__':
     entry_size = struct.calcsize(ENTRY_STRUCT)
 
-    with open(ROM_PATH, 'rb') as f, open("temp.bin", 'wb') as t:
+    with open(ROM_PATH, 'rb') as f, open("temp.bin", 'wb') as t, open("new_rom.gba", 'wb') as new_rom:
         # f.seek(0x9CEAFC)
         # f.read(0x9CEAFC + (entry_size * (15 * 12)))
 
         rom_bin = f.read()
+
+        new_rom.write(rom_bin)
 
         t.write(rom_bin[0x9CEAFC:0x9CEAFC + (entry_size * (15 * 12))])
 
@@ -201,4 +203,26 @@ if __name__ == '__main__':
         # pprint(cooler, sort_dicts=False)
 
         # This is the COOLER pprint
-        print_entry_list(entry_list)
+        # print_entry_list(entry_list)
+
+    # Shuffle
+    # new_entry_list = []
+    # for entry in entry_list:
+    #     if entry.id == -1:
+    #         new_entry_list.append(entry)
+
+
+
+
+    # Rewrite ROM
+    with open("new_rom.gba", 'rb+') as new_rom:
+        _bin = new_rom.read()
+
+        cool = b''
+
+        for entry in entry_list:
+            print(entry)
+            cool += (struct.pack(ENTRY_STRUCT, *entry))
+
+        new_rom.seek(0)
+        new_rom.write(_bin[:0x9CEAFC] + cool + _bin[0x9CEAFC + (entry_size * (15 * 12)):])
