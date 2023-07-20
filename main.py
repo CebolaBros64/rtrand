@@ -2,6 +2,7 @@ import struct
 from functools import partial
 # from pprint import pprint
 from collections import namedtuple
+from random import randrange
 
 ROM_PATH = "2462 - Rhythm Tengoku (J)(WRG).gba"
 
@@ -206,21 +207,33 @@ if __name__ == '__main__':
         # print_entry_list(entry_list)
 
     # Shuffle
-    # new_entry_list = []
-    # for entry in entry_list:
-    #     if entry.id == -1:
-    #         new_entry_list.append(entry)
+    new_entry_list = []
+    game_id_pool = [*range(0, 41)]
+    for entry in entry_list:
+        if entry.id == -1:
+            new_entry_list.append(entry)
 
+        elif entry.id in range(0, 41):  # Rhythm Games
+            new_id = game_id_pool.pop(randrange(len(game_id_pool)))
 
+            new_entry_list.append(Entry(
+                id=new_id,
+                displayReq=entry.displayReq,
+                unlockReq=entry.unlockReq,
+                targets=entry.targets,
+                flags=entry.flags,
+                delay=entry.delay
+            ))
 
+        else:
+            new_entry_list.append(entry)
 
     # Rewrite ROM
     with open("new_rom.gba", 'rb+') as new_rom:
         _bin = new_rom.read()
 
         cool = b''
-
-        for entry in entry_list:
+        for entry in new_entry_list:
             print(entry)
             cool += (struct.pack(ENTRY_STRUCT, *entry))
 
