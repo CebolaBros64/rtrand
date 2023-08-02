@@ -2,3 +2,8 @@
 *.gba
 *.bin
 *.sav
+
+pyvenv.cfg
+
+Lib/
+Scripts/
