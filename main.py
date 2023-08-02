@@ -1,93 +1,16 @@
-import struct
-from functools import partial
 from collections import namedtuple
-from random import randrange
+from functools import partial
 from pathlib import Path
+from random import randrange
 from sys import argv
+import struct
+
+import defs
 
 if len(argv) >= 2:
     ROM_PATH = Path(argv[1])
 else:
     ROM_PATH = Path("2462 - Rhythm Tengoku (J)(WRG).gba")
-
-LEVEL_NAMES = [
-    'LEVEL_NULL',  # -1
-    'LEVEL_KARATE_MAN',  # 0
-    'LEVEL_KARATE_MAN_2',  # 1
-    'LEVEL_CLAPPY_TRIO',  # 2
-    'LEVEL_SNAPPY_TRIO',  # 3...
-    'LEVEL_POLYRHYTHM',
-    'LEVEL_POLYRHYTHM_2',
-    'LEVEL_NIGHT_WALK',
-    'LEVEL_NIGHT_WALK_2',
-    'LEVEL_RHYTHM_TWEEZERS',
-    'LEVEL_RHYTHM_TWEEZERS_2',
-    'LEVEL_SICK_BEATS',
-    'LEVEL_BOUNCY_ROAD',
-    'LEVEL_BOUNCY_ROAD_2',
-    'LEVEL_NINJA_BODYGUARD',
-    'LEVEL_NINJA_REINCARNATE',
-    'LEVEL_SNEAKY_SPIRITS',
-    'LEVEL_SNEAKY_SPIRITS_2',
-    'LEVEL_SAMURAI_SLICE',
-    'LEVEL_SPACEBALL',
-    'LEVEL_SPACEBALL_2',
-    'LEVEL_TAP_TRIAL',
-    'LEVEL_TAP_TRIAL_2',
-    'LEVEL_MARCHING_ORDERS',
-    'LEVEL_MARCHING_ORDERS_2',
-    'LEVEL_WIZARDS_WALTZ',
-    'LEVEL_BUNNY_HOP',
-    'LEVEL_FIREWORKS',
-    'LEVEL_POWER_CALLIGRAPHY',
-    'LEVEL_POWER_CALLIGRAPHY_2',
-    'LEVEL_TOSS_BOYS',
-    'LEVEL_TOSS_BOYS_2',
-    'LEVEL_RAT_RACE',
-    'LEVEL_TRAM_PAULINE',
-    'LEVEL_SHOWTIME',
-    'LEVEL_SPACE_DANCE',
-    'LEVEL_COSMIC_DANCE',
-    'LEVEL_RAP_MEN',
-    'LEVEL_RAP_WOMEN',
-    'LEVEL_QUIZ_SHOW',
-    'LEVEL_BON_ODORI',
-    'LEVEL_BON_DANCE',
-    'LEVEL_REMIX_1',
-    'LEVEL_REMIX_2',
-    'LEVEL_REMIX_3',
-    'LEVEL_REMIX_4',
-    'LEVEL_REMIX_5',
-    'LEVEL_REMIX_6',
-    'LEVEL_REMIX_7',
-    'LEVEL_REMIX_8',
-    'LEVEL_CAFE',
-    'LEVEL_RHYTHM_TOYS',
-    'LEVEL_ENDLESS_GAMES',
-    'LEVEL_DRUM_LESSONS',
-    'LEVEL_STAFF_CREDIT',
-    'LEVEL_LIVE_MENU'
-]
-
-LEVEL_STATES = [
-    'LEVEL_STATE_NULL',  # -1
-    'LEVEL_STATE_HIDDEN',  # 0
-    'LEVEL_STATE_APPEARING',  # 1
-    'LEVEL_STATE_CLOSED',  # 2
-    'LEVEL_STATE_OPEN',  # 3...
-    'LEVEL_STATE_CLEARED',
-    'LEVEL_STATE_HAS_MEDAL'
-]
-
-LEVEL_FLAGS = [
-    'TARGET_ON_SHOW',  # 0
-    'MOVE_CURSOR',  # 1
-    'CLEAR_BY_DEFAULT',  # 2
-    'DELAY_CLEAR',  # 3...
-    'DELAY_OPEN',
-    'DELAY_SHOW',
-    'TARGET_ON_OPEN'
-]
 
 Entry = namedtuple('Entry', ['id', 'displayReq', 'unlockReq', 'targets', 'flags', 'delay'])
 #            Level ID
@@ -128,7 +51,7 @@ def get_gba_pointer(pointer_value):
 
 
 def get_level(level_value):
-    levels = dict(enumerate(LEVEL_NAMES, start=-1))
+    levels = dict(enumerate(defs.LEVEL_NAMES, start=-1))
 
     return levels[level_value]
 
@@ -151,7 +74,7 @@ def get_requirements(req_value):
                 break
 
     requirements = []
-    lvl_states = dict(enumerate(LEVEL_STATES, start=-1))
+    lvl_states = dict(enumerate(defs.LEVEL_STATES, start=-1))
     for i in range(0, len(raw_requirements), 3):
         state_index = struct.unpack('b', raw_requirements[i:i + 1])[0]
 
@@ -171,7 +94,7 @@ def get_requirements(req_value):
 def get_flags(flag_value):
     flags_used = []
 
-    for index, fl in enumerate(LEVEL_FLAGS):
+    for index, fl in enumerate(defs.LEVEL_FLAGS):
         if ((flag_value >> index) & 1) == 1:
             flags_used.append(fl)
 
