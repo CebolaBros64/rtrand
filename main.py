@@ -2,6 +2,7 @@ import struct
 from functools import partial
 from collections import namedtuple
 from random import randrange
+from pathlib import Path
 
 ROM_PATH = "2462 - Rhythm Tengoku (J)(WRG).gba"
 
@@ -199,7 +200,7 @@ if __name__ == '__main__':
 
     with open("temp.bin", 'rb') as f:
         entry_list = parse2list(f, struct.Struct(ENTRY_STRUCT).unpack_from, entry_size)
-        
+
         # print_entry_list(entry_list)
 
     # Shuffle
@@ -235,3 +236,5 @@ if __name__ == '__main__':
 
         new_rom.seek(0)
         new_rom.write(_bin[:0x9CEAFC] + cool + _bin[0x9CEAFC + (entry_size * (15 * 12)):])
+
+    Path("temp.bin").unlink()
