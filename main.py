@@ -1,6 +1,5 @@
 import struct
 from functools import partial
-# from pprint import pprint
 from collections import namedtuple
 from random import randrange
 
@@ -99,6 +98,7 @@ ENTRY_STRUCT = "< h 2x 4s 4s 4s B h x"
 
 
 def print_entry_list(_l):
+    """ For debugging purposes """
     for entry in _l:
         print('')
         for attrb in entry._fields:
@@ -199,11 +199,7 @@ if __name__ == '__main__':
 
     with open("temp.bin", 'rb') as f:
         entry_list = parse2list(f, struct.Struct(ENTRY_STRUCT).unpack_from, entry_size)
-
-        # This is pprint:
-        # pprint(cooler, sort_dicts=False)
-
-        # This is the COOLER pprint
+        
         # print_entry_list(entry_list)
 
     # Shuffle
@@ -234,7 +230,7 @@ if __name__ == '__main__':
 
         cool = b''
         for entry in new_entry_list:
-            print(entry)
+            # print(entry)
             cool += (struct.pack(ENTRY_STRUCT, *entry))
 
         new_rom.seek(0)
