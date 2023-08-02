@@ -3,8 +3,12 @@ from functools import partial
 from collections import namedtuple
 from random import randrange
 from pathlib import Path
+from sys import argv
 
-ROM_PATH = "2462 - Rhythm Tengoku (J)(WRG).gba"
+if len(argv) >= 2:
+    ROM_PATH = Path(argv[1])
+else:
+    ROM_PATH = Path("2462 - Rhythm Tengoku (J)(WRG).gba")
 
 LEVEL_NAMES = [
     'LEVEL_NULL',  # -1
