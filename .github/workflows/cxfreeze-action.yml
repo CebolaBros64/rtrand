@@ -19,7 +19,7 @@ jobs:
       - name: Install Python
         uses: actions/setup-python@v2
       - name: Build
-        run: "./${{ matrix.build-script }} dist-${{ matrix.name }}"
+        run: "rm -fr dist/ && cxfreeze -c main.py --target-dir dist-${{ matrix.name }}"
       - name: Zip release
         uses: thedoctor0/zip-release@master
         with:
