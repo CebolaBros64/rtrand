@@ -20,12 +20,8 @@ jobs:
         uses: actions/setup-python@v2
       - name: Install requirements
         run: "pip install cx_Freeze"
-      - if: ${{ matrix.name }} == windows
-        name: Build
-        run: "cxfreeze -c main.py --target-dir ${{ matrix.name }}"
-      - if: ${{ matrix.name }} == linux
-        name: Build
-        run: "rm -fr dist/ && cxfreeze -c main.py --target-dir dist-${{ matrix.name }}"
+      - name: Build
+        run: "cxfreeze -c main.py --target-dir dist-${{ matrix.name }}"
       - name: Zip release
         uses: thedoctor0/zip-release@master
         with:
