@@ -18,6 +18,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Install Python
         uses: actions/setup-python@v2
+      - name: Install requirements
+        run: "pip install cx_Freeze"
       - name: Build
         run: "rm -fr dist/ && cxfreeze -c main.py --target-dir dist-${{ matrix.name }}"
       - name: Zip release
